@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://soap.ws.trainings.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="PrintingServiceService" targetNamespace="http://soap.ws.trainings.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soap.ws.trainings.com/" elementFormDefault="unqualified" targetNamespace="http://soap.ws.trainings.com/" version="1.0">
+
+  <xs:element name="processPayment" type="tns:processPayment"/>
+
+  <xs:element name="processPaymentResponse" type="tns:processPaymentResponse"/>
+
+  <xs:complexType name="processPayment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="printingServiceRequest" type="tns:PrintingServiceRequest"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PrintingServiceRequest">
+    <xs:sequence>
+      <xs:element name="reservation" type="tns:Reservation"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Reservation">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="flight" type="tns:Flight"/>
+      <xs:element name="created" type="xs:dateTime"/>
+      <xs:element name="password" type="xs:string"/>
+      <xs:element name="seats" type="xs:int"/>
+      <xs:element name="state" type="tns:state"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Flight">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="destinationFrom" type="tns:Destination"/>
+      <xs:element name="destinationTo" type="tns:Destination"/>
+      <xs:element name="dateOfDeparture" type="xs:dateTime"/>
+      <xs:element name="distance" type="xs:double"/>
+      <xs:element name="price" type="xs:double"/>
+      <xs:element name="seats" type="xs:int"/>
+      <xs:element name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Destination">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="lat" type="xs:float"/>
+      <xs:element name="lon" type="xs:float"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="processPaymentResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="response" type="tns:PrintingServiceResponse"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PrintingServiceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="file" type="xs:base64Binary"/>
+      <xs:element name="result" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="state">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NEW"/>
+      <xs:enumeration value="CANCELED"/>
+      <xs:enumeration value="PAID"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="processPaymentResponse">
+    <wsdl:part element="tns:processPaymentResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="processPayment">
+    <wsdl:part element="tns:processPayment" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PrintingService">
+    <wsdl:operation name="processPayment">
+      <wsdl:input message="tns:processPayment" name="processPayment">
+    </wsdl:input>
+      <wsdl:output message="tns:processPaymentResponse" name="processPaymentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PrintingServiceServiceSoapBinding" type="tns:PrintingService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="processPayment">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="processPayment">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="processPaymentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PrintingServiceService">
+    <wsdl:port binding="tns:PrintingServiceServiceSoapBinding" name="PrintingServicePort">
+      <soap:address location="http://localhost:8081/javafirstws/services/printingService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

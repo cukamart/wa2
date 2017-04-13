@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions targetNamespace="cz.cvut.fel" name="PrintingServiceService"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="cz.cvut.fel"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <wsdl:types>
+        <xs:schema targetNamespace="cz.cvut.fel" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                   xmlns:tns="cz.cvut.fel" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0" elementFormDefault="unqualified"
+                   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="processEmail" type="tns:processEmail"/>
+            <xs:element name="processEmailResponse" type="tns:processEmailResponse"/>
+
+            <xs:complexType name="processEmail">
+                <xs:sequence>
+                    <xs:element name="request" type="tns:SendEmailRequest" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="SendEmailRequest">
+                <xs:sequence>
+                    <xs:element name="email" type="tns:Email"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="Email">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="subject" type="xs:string"/>
+                    <xs:element name="text" type="xs:string"/>
+                    <xs:element name="sender" type="tns:User"/>
+                    <xs:element name="receiver" type="tns:User"/>
+                </xs:sequence>
+
+            </xs:complexType>
+            <xs:complexType name="User">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long"/>
+                    <xs:element name="emailAddress" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="processEmailResponse">
+                <xs:sequence>
+                    <xs:element name="response" type="tns:SendEmailResponse" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+
+            <xs:complexType name="SendEmailResponse">
+                <xs:sequence>
+                    <xs:element name="result" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+
+
+    <wsdl:message name="processEmail">
+        <wsdl:part name="parameters" element="tns:processEmail"></wsdl:part>
+    </wsdl:message>
+
+    <wsdl:message name="processEmailResponse">
+        <wsdl:part name="parameters" element="tns:processEmailResponse"></wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="PrintingService">
+        <wsdl:operation name="processEmail">
+            <wsdl:input name="processEmail" message="tns:processEmail"></wsdl:input>
+            <wsdl:output name="processEmailResponse" message="tns:processEmailResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="PrintingServiceServiceSoapBinding" type="tns:PrintingService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="processEmail">
+            <soap:operation style="document" soapAction=""/>
+            <wsdl:input name="processEmail">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="processEmailResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="PrintingServiceService">
+        <wsdl:port name="PrintingServicePort" binding="tns:PrintingServiceServiceSoapBinding">
+            <soap:address location="http://localhost:8081/cz.cvut.fel/services/processEmail"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
